@@ -1,0 +1,25 @@
+Add a CyanChat account
+    - Default username
+    - Enable userlist magic
+    - Enable bot cleaning
+
+Join a chat
+    - Set username for room
+    - Specify server & port
+    - Connect
+    - Display lobby msg as PM from ServerName:Port
+    - Join the chatroom
+    - Chat name = ServerName:Port
+
+
+
+Join a Chat
+	* Specify server, port, and username
+	* cyanchat_chat_join
+	* We need to se up a new server connection
+	* Actually connect and set up an input handler
+	* 40|1
+	* parse input
+	* log in
+	* display chatroom (and get ID)
+	* parse userlist, etc.
