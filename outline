@@ -1,0 +1,13 @@
+Outline for libcyanchat GObject-ification
+=========================================
+
+* CyanChatSession (CyanChatAccount?)
+* CyanChatBuddy   (CyanChatMember?)
+* CyanChatMessage
+* CyanChatParser
+
+Non-Classes:
+
+* cyanchat_utils
+* cyanchat_callbacks
+	(Maybe a struct with func pointers that libpurple can implement?)

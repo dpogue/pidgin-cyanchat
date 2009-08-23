@@ -1,0 +1,12 @@
+CyanChatSession
+	gchar*			server
+	guint			port
+	gint			socket
+	CyanChatParser* 	parser?
+				buddies
+	#guint			chat_id
+	gchar* 			nickname
+	gchar* 			reqnick
+
+	cyanchat_session_new(server, port, reqnick)
+	cyanchat_session_connect(CyanChatSession* ccs)
