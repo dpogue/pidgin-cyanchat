@@ -18,11 +18,14 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CYANCHAT_PURPLE_H
-#define _CYANCHAT_PURPLE_H
-
-#include <glib.h>
-#include <glib-object.h>
 #include "cc_session.h"
 
-#endif /* _CYANCHAT_PURPLE_H */
+/* Private Data */
+struct _CyanChatSessionPrivate {
+	gchar* server;
+	guint port;
+	gint socket;
+	GHashTable* buddies;
+	gchar* nickname;
+	gchar* reqnick;
+};

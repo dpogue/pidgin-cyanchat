@@ -159,13 +159,13 @@ cyanchat_buddy_level_get_type()
 }
 
 CyanChatBuddy*
-cyanchat_buddy_new(const gchar* nickname, CyanChatBuddyLevel level, gboolean ignored)
+cyanchat_buddy_new(G_GNUC_CONST gchar* nickname, G_GNUC_CONST CyanChatBuddyLevel level, G_GNUC_CONST gboolean ignored)
 {
 	return g_object_new(CYANCHAT_TYPE_BUDDY, "nickname", nickname, "level", level, "ignored", ignored, NULL);
 }
 
 CyanChatBuddy*
-cyanchat_buddy_new_from_username(const gchar* username)
+cyanchat_buddy_new_from_username(G_GNUC_CONST gchar* username)
 {
 	const gchar* c;
 	const gchar* br;
