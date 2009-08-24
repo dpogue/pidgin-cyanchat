@@ -41,6 +41,7 @@ cyanchat_session_init(CyanChatSession* self)
 	self->priv->nickname = NULL;
 	self->priv->reqnick = NULL;
 	self->priv->buddies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)cyanchat_buddy_unref);
+	self->priv->socket = -1; /* -1 as an invalid file descriptor */
 }
 
 static void
