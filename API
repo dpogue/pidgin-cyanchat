@@ -1,12 +1,53 @@
-CyanChatSession
-	gchar*			server
-	guint			port
-	gint			socket
-	CyanChatParser* 	parser?
-				buddies
-	#guint			chat_id
-	gchar* 			nickname
-	gchar* 			reqnick
+CyanChatBuddy
+	private:
+		gchar*				nickname
+		CyanChatBuddyLevel	level
+		gboolean			ignored
+	
+	cyanchat_buddy_new(nickname, level, ignored)
+	cyanchat_buddy_new_from_username(username)
+	cyanchat_buddy_get_nickname(b)
+	cyanchat_buddy_get_level(b)
+	cyanchat_buddy_get_ignored(b)
+	
+======================================
 
-	cyanchat_session_new(server, port, reqnick)
-	cyanchat_session_connect(CyanChatSession* ccs)
+CyanChatSession
+	private:
+		gchar*				server
+		guint				port
+		gint				socket
+		GHashTable*			buddies
+		gchar*				nickname
+		gchar*				reqnick
+	
+	virtual:
+		name_accepted
+		name_denied
+		received_im
+		received_chat
+		add_chat_buddy
+		remove_chat_buddy
+		change_chat_buddy
+		lobby_message
+		ignore_chat_buddy
+		unhandled_cmd
+		get_version
+	
+	cyanchat_session_new(server, port)
+	
+	get_name(s) <"server:port">
+	get_nickname(s)
+	
+	set_nickname(s, nickname)
+
+	send(s, const gchar* msg)
+
+======================================
+
+CyanChatSessionPurple:
+	private:
+		guint				chat_id
+		PurpleConversation*	convo
+	
+	

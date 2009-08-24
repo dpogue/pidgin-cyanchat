@@ -36,7 +36,7 @@ G_BEGIN_DECLS
 #define CYANCHAT_IS_SESSION_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), CYANCHAT_TYPE_SESSION))
 #define CYANCHAT_SESSION_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS((object), CYANCHAT_TYPE_SESSION, CyanChatSessionClass))
 
-#define CYANCHAT_SESSION_NULL (0)
+typedef struct _CyanChatSessionPrivate CyanChatSessionPrivate;
 
 /**
   CyanChatSession:
@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 typedef struct _CyanChatSession CyanChatSession;
 struct _CyanChatSession {
 	GObject parent;
+	CyanChatSessionPrivate* priv;
 };
 
 
@@ -58,6 +59,13 @@ struct _CyanChatSession {
   @name_denied: React to a "10" message
   @received_im: React to an incoming private message
   @received_chat: React to an incoming public chat message
+  @add_chat_buddy: Add a new user to the chat buddy list
+  @remove_chat_buddy: Remove a user from the chat buddy list
+  @change_chat_buddy: Change a chat buddy's nickname or level
+  @lobby_message: React to a "40" message
+  @ignore_chat_buddy: Ignore a chat buddy
+  @unhandled_cmd: React to an unexpected message type
+  @get_version: The !version response string
 */
 typedef struct _CyanChatSessionClass CyanChatSessionClass;
 struct _CyanChatSessionClass {
@@ -67,7 +75,22 @@ struct _CyanChatSessionClass {
 	void (*name_accepted)(CyanChatSession* ccs);
 	void (*name_denied)(CyanChatSession* ccs);
 	void (*received_im)(CyanChatSession* css, CyanChatBuddy* b, gchar* msg);
+	void (*recevied_chat)(CyanChatSession* ccs, CyanChatBuddy* b, gchar* msg);
+	void (*add_chat_buddy)(CyanChatSession* ccs, CyanChatBuddy* b);
+	void (*remove_chat_buddy)(CyanChatSession* ccs, CyanChatBuddy* b);
+	void (*change_chat_buddy)(CyanChatSession* ccs, CyanChatBuddy* a, CyanChatBuddy* b);
+	void (*lobby_message)(CyanChatSession* ccs, gchar* msg);
+	void (*ignore_chat_buddy)(CyanChatSession* css, CyanChatBuddy* b);
+	void (*unhandled_cmd)(CyanChatSession* ccs, gchar* rawcmd);
+
+	G_GNUC_CONST gchar* (*get_version)();
 };
+
+GType cyanchat_session_get_type(void);
+CyanChatSession* cyanchat_session_new(G_GNUC_CONST gchar* server, G_GNUC_CONST guint port);
+
+G_GNUC_CONST gchar* cyanchat_session_get_name(CyanChatSession* s);
+G_GNUC_CONST gchar* cyanchat_sessio_get_nickname(CyanChatSession* s);
 
 G_END_DECLS
 
