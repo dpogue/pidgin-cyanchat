@@ -21,7 +21,7 @@
 #ifndef _CYANCHAT_SESSION_H
 #define _CYANCHAT_SESSION_H
 
-#include <glib.g>
+#include <glib.h>
 #include <glib-object.h>
 
 #include "cc_buddy.h"
@@ -87,7 +87,7 @@ struct _CyanChatSessionClass {
 };
 
 GType cyanchat_session_get_type(void);
-CyanChatSession* cyanchat_session_new(G_GNUC_CONST gchar* server, G_GNUC_CONST guint port);
+CyanChatSession* cyanchat_session_new(const gchar* server, const guint port);
 
 G_GNUC_CONST gchar* cyanchat_session_get_name(CyanChatSession* s);
 G_GNUC_CONST gchar* cyanchat_sessio_get_nickname(CyanChatSession* s);

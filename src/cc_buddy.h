@@ -67,12 +67,12 @@ struct _CyanChatBuddyClass {
 
 GType               cyanchat_buddy_level_get_type(void);
 GType               cyanchat_buddy_get_type(void);
-CyanChatBuddy*      cyanchat_buddy_new(G_GNUC_CONST gchar* nickname, G_GNUC_CONST CyanChatBuddyLevel level, G_GNUC_CONST gboolean ignored);
-CyanChatBuddy*      cyanchat_buddy_new_from_username(G_GNUC_CONST gchar* username);
+CyanChatBuddy*      cyanchat_buddy_new(const gchar* nickname, const CyanChatBuddyLevel level, const gboolean ignored);
+CyanChatBuddy*      cyanchat_buddy_new_from_username(const gchar* username);
 gchar*              cyanchat_buddy_get_nickname(CyanChatBuddy* b);
 CyanChatBuddyLevel  cyanchat_buddy_get_level(CyanChatBuddy* b);
 gboolean            cyanchat_buddy_get_ignored(CyanChatBuddy* b);
-void                cyanchat_buddy_unref(CyanChatBuddy* b);
+void                cyanchat_buddy_free(CyanChatBuddy* b);
 
 G_END_DECLS
 

@@ -39,6 +39,8 @@ enum {
 
 #define CYANCHAT_BUDDY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), CYANCHAT_TYPE_BUDDY, CyanChatBuddyPrivate))
 
+G_DEFINE_TYPE(CyanChatBuddy, cyanchat_buddy, G_TYPE_OBJECT);
+
 static void
 cyanchat_buddy_init(CyanChatBuddy* self)
 {
@@ -52,7 +54,7 @@ cyanchat_buddy_init(CyanChatBuddy* self)
 static void
 cyanchat_buddy_finalize(GObject* object)
 {
-	CyanchatBuddy* b;
+	CyanChatBuddy* b;
 
 	g_return_if_fail(object != NULL);
 	g_return_if_fail(CYANCHAT_IS_BUDDY(object));
@@ -144,7 +146,7 @@ cyanchat_buddy_class_init(CyanChatBuddyClass* klass)
 	g_type_class_add_private(klass, sizeof(CyanChatBuddyPrivate));
 }
 
-G_DEFINE_TYPE(CyanChatBuddy, cyanchat_buddy, G_TYPE_OBJECT);
+//G_DEFINE_TYPE(CyanChatBuddy, cyanchat_buddy, G_TYPE_OBJECT);
 
 GType
 cyanchat_buddy_level_get_type()
@@ -165,13 +167,13 @@ cyanchat_buddy_level_get_type()
 }
 
 CyanChatBuddy*
-cyanchat_buddy_new(G_GNUC_CONST gchar* nickname, G_GNUC_CONST CyanChatBuddyLevel level, G_GNUC_CONST gboolean ignored)
+cyanchat_buddy_new(const gchar* nickname, const CyanChatBuddyLevel level, const gboolean ignored)
 {
 	return g_object_new(CYANCHAT_TYPE_BUDDY, "nickname", nickname, "level", level, "ignored", ignored, NULL);
 }
 
 CyanChatBuddy*
-cyanchat_buddy_new_from_username(G_GNUC_CONST gchar* username)
+cyanchat_buddy_new_from_username(const gchar* username)
 {
 	const gchar* c;
 	const gchar* br;
@@ -222,15 +224,9 @@ cyanchat_buddy_get_ignored(CyanChatBuddy*b)
 }
 
 void
-cyanchat_buddy_unref(CyanChatBuddy* b)
+cyanchat_buddy_free(CyanChatBuddy* b)
 {
-	gboolean is_zero;
-
 	g_return_if_fail(b != NULL);
-	g_return_if_fail(b->refcount > 0);
-
-	is_zero = g_atomic_int_dec_and_test(&b->refcount);
-	if(G_UNLIKELY(is_zero)) {
-		cyanchat_buddy_finalize(b);
-	}
+	
+	cyanchat_buddy_finalize((GObject*)b);
 }

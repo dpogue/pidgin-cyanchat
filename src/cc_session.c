@@ -32,6 +32,8 @@ struct _CyanChatSessionPrivate {
 
 #define CYANCHAT_SESSION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), CYANCHAT_TYPE_SESSION, CyanChatSessionPrivate))
 
+G_DEFINE_TYPE(CyanChatSession, cyanchat_session, G_TYPE_OBJECT);
+
 static void
 cyanchat_session_init(CyanChatSession* self)
 {
@@ -40,7 +42,7 @@ cyanchat_session_init(CyanChatSession* self)
 	self->priv->server = NULL;
 	self->priv->nickname = NULL;
 	self->priv->reqnick = NULL;
-	self->priv->buddies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)cyanchat_buddy_unref);
+	self->priv->buddies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)cyanchat_buddy_free);
 	self->priv->socket = -1; /* -1 as an invalid file descriptor */
 }
 
@@ -71,5 +73,3 @@ cyanchat_session_class_init(CyanChatSessionClass* klass)
 
 	g_type_class_add_private(klass, sizeof(CyanChatSessionPrivate));
 }
-
-G_DEFINE_TYPE(CyanChatSession, cyanchat_session, G_TYPE_OBJECT);
