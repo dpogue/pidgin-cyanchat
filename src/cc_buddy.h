@@ -72,6 +72,7 @@ CyanChatBuddy*      cyanchat_buddy_new_from_username(G_GNUC_CONST gchar* usernam
 gchar*              cyanchat_buddy_get_nickname(CyanChatBuddy* b);
 CyanChatBuddyLevel  cyanchat_buddy_get_level(CyanChatBuddy* b);
 gboolean            cyanchat_buddy_get_ignored(CyanChatBuddy* b);
+void                cyanchat_buddy_unref(CyanChatBuddy* b);
 
 G_END_DECLS
 

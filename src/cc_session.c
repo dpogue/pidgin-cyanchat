@@ -29,3 +29,46 @@ struct _CyanChatSessionPrivate {
 	gchar* nickname;
 	gchar* reqnick;
 };
+
+#define CYANCHAT_SESSION_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), CYANCHAT_TYPE_SESSION, CyanChatSessionPrivate))
+
+static void
+cyanchat_session_init(CyanChatSession* self)
+{
+	self->priv = CYANCHAT_SESSION_GET_PRIVATE(self);
+
+	self->priv->server = NULL;
+	self->priv->nickname = NULL;
+	self->priv->reqnick = NULL;
+	self->priv->buddies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)cyanchat_buddy_unref);
+}
+
+static void
+cyanchat_session_finalize(GObject* object)
+{
+	CyanChatSession* s;
+
+	g_return_if_fail(object != NULL);
+	g_return_if_fail(CYANCHAT_IS_SESSION(object));
+
+	s = CYANCHAT_SESSION(object);
+
+	g_hash_table_destroy(s->priv->buddies);
+	g_free(s->priv->server);
+	g_free(s->priv->nickname);
+	g_free(s->priv->reqnick);
+
+	G_OBJECT_CLASS(cyanchat_session_parent_class)->finalize(object);
+}
+
+static void
+cyanchat_session_class_init(CyanChatSessionClass* klass)
+{
+	GObjectClass* gobject_class = (GObjectClass*)klass;
+
+	gobject_class->finalize = cyanchat_session_finalize;
+
+	g_type_class_add_private(klass, sizeof(CyanChatSessionPrivate));
+}
+
+G_DEFINE_TYPE(CyanChatSession, cyanchat_session, G_TYPE_OBJECT);

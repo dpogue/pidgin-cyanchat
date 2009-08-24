@@ -39,8 +39,6 @@ enum {
 
 #define CYANCHAT_BUDDY_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), CYANCHAT_TYPE_BUDDY, CyanChatBuddyPrivate))
 
-static GObjectClass* parent_class = NULL;
-
 static void
 cyanchat_buddy_init(CyanChatBuddy* self)
 {
@@ -54,9 +52,17 @@ cyanchat_buddy_init(CyanChatBuddy* self)
 static void
 cyanchat_buddy_finalize(GObject* object)
 {
-	CyanChatBuddyPrivate* priv = CYANCHAT_BUDDY_GET_PRIVATE(object);
+	CyanchatBuddy* b;
+
+	g_return_if_fail(object != NULL);
+	g_return_if_fail(CYANCHAT_IS_BUDDY(object));
+
+	b = CYANCHAT_BUDDY(object);
+	CyanChatBuddyPrivate* priv = CYANCHAT_BUDDY_GET_PRIVATE(b);
 
 	g_free(priv->nickname);
+
+	G_OBJECT_CLASS(cyanchat_buddy_parent_class)->finalize(object);
 }
 
 static void
@@ -213,4 +219,18 @@ cyanchat_buddy_get_ignored(CyanChatBuddy*b)
 	g_return_value_if_fail(CYANCHAT_IS_BUDDY(b), NULL);
 	g_object_get(b, "ignored", &ignored, NULL);
 	return ignored;
+}
+
+void
+cyanchat_buddy_unref(CyanChatBuddy* b)
+{
+	gboolean is_zero;
+
+	g_return_if_fail(b != NULL);
+	g_return_if_fail(b->refcount > 0);
+
+	is_zero = g_atomic_int_dec_and_test(&b->refcount);
+	if(G_UNLIKELY(is_zero)) {
+		cyanchat_buddy_finalize(b);
+	}
 }
