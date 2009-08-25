@@ -72,16 +72,16 @@ struct _CyanChatSessionClass {
 	GObjectClass parent;
 
 	/* Virtual Functions */
-	void (*name_accepted)(CyanChatSession* ccs);
-	void (*name_denied)(CyanChatSession* ccs);
-	void (*received_im)(CyanChatSession* css, CyanChatBuddy* b, gchar* msg);
-	void (*recevied_chat)(CyanChatSession* ccs, CyanChatBuddy* b, gchar* msg);
-	void (*add_chat_buddy)(CyanChatSession* ccs, CyanChatBuddy* b);
-	void (*remove_chat_buddy)(CyanChatSession* ccs, CyanChatBuddy* b);
-	void (*change_chat_buddy)(CyanChatSession* ccs, CyanChatBuddy* a, CyanChatBuddy* b);
-	void (*lobby_message)(CyanChatSession* ccs, gchar* msg);
-	void (*ignore_chat_buddy)(CyanChatSession* css, CyanChatBuddy* b);
-	void (*unhandled_cmd)(CyanChatSession* ccs, gchar* rawcmd);
+	void (*name_accepted)(CyanChatSession* s);
+	void (*name_denied)(CyanChatSession* s);
+	void (*received_im)(CyanChatSession* s, CyanChatBuddy* b, gchar* msg);
+	void (*recevied_chat)(CyanChatSession* s, CyanChatBuddy* b, gchar* msg);
+	void (*add_chat_buddy)(CyanChatSession* s, CyanChatBuddy* b);
+	void (*remove_chat_buddy)(CyanChatSession* s, CyanChatBuddy* b);
+	void (*change_chat_buddy)(CyanChatSession* s, CyanChatBuddy* a, CyanChatBuddy* b);
+	void (*lobby_message)(CyanChatSession* s, gchar* msg);
+	void (*ignore_chat_buddy)(CyanChatSession* s, CyanChatBuddy* b);
+	void (*unhandled_cmd)(CyanChatSession* s, gchar* rawcmd);
 
 	G_GNUC_CONST gchar* (*get_version)();
 };
@@ -90,7 +90,13 @@ GType cyanchat_session_get_type(void);
 CyanChatSession* cyanchat_session_new(const gchar* server, const guint port);
 
 G_GNUC_CONST gchar* cyanchat_session_get_name(CyanChatSession* s);
-G_GNUC_CONST gchar* cyanchat_sessio_get_nickname(CyanChatSession* s);
+G_GNUC_CONST gchar* cyanchat_session_get_nickname(CyanChatSession* s);
+
+void cyanchat_session_connect(CyanChatSession* s);
+void cyanchat_session_disconnect(CyanChatSession* s);
+
+/* msg should *NOT* be terminated with \r\n\0 as that is added here */
+void cyanchat_session_send(CyanChatSession* s, const gchar* msg);
 
 G_END_DECLS
 
