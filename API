@@ -9,7 +9,17 @@ CyanChatBuddy
 	cyanchat_buddy_get_nickname(b)
 	cyanchat_buddy_get_level(b)
 	cyanchat_buddy_get_ignored(b)
-	
+
+======================================
+
+cyanchat_utils_join(s, nickname)
+cyanchat_utils_part(s)
+cyanchat_utils_im(s, b, msg)
+cyanchat_utils_chat(s, msg)
+cyanchat_utils_connect(s)
+cyanchat_utils_auth(s, passwd)
+cyanchat_utils_ignore(s, b)
+
 ======================================
 
 CyanChatSession
@@ -36,18 +46,39 @@ CyanChatSession
 	
 	cyanchat_session_new(server, port)
 	
-	get_name(s) <"server:port">
-	get_nickname(s)
+	cyanchat_session_get_name(s) // "server:port"
+	cyanchat_session_get_nickname(s)
 	
-	set_nickname(s, nickname)
+	cyanchat_session_set_nickname(s, reqnick)
 
-	send(s, const gchar* msg)
+	cyanchat_session_connect(s)
+	cyanchat_session_disconnect(s)
+	cyanchat_session_send(s, const gchar* msg)
 
 ======================================
 
-CyanChatSessionPurple:
+CyanChatSessionPurple(CyanChatSession)
 	private:
+		PurpleAccount*		account
 		guint				chat_id
 		PurpleConversation*	convo
 	
+	cyanchat_session_purple_new(account)
 	
+	cyanchat_session_purple_name_accepted(s)
+	cyanchat_session_purple_name_denied(s)
+	cyanchat_session_purple_received_im(s, b, msg)
+	cyanchat_session_purple_received_chat(s, b, msg)
+	cyanchat_session_purple_add_chat_buddy(s, b)
+	cyanchat_session_purple_remove_chat_buddy(s, b)
+	cyanchat_session_purple_change_chat_buddy(s, a, b)
+	cyanchat_session_purple_lobby_message(s, msg)
+	cyanchat_session_purple_ignore_chat_buddy(s, b)
+	cyanchat_session_purple_unhandled_cmd(s, rawcmd)
+	cyanchat_session_purple_get_version()
+	
+======================================
+
+CyanChatConnection(TpBaseConnection)
+	private:
+		CyanChatSessionTelepathy*	session
