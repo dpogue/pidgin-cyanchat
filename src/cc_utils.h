@@ -23,6 +23,8 @@
 
 #include "cc_session.h"
 
+G_BEGIN_DECLS
+
 typedef enum {
 	CYANCHAT_C_JOIN = 10,
 	CYANCHAT_C_PART = 15,
@@ -43,10 +45,12 @@ typedef enum {
 
 void cyanchat_utils_join(CyanChatSession* s, const gchar* nickname);
 void cyanchat_utils_part(CyanChatSession* s);
-void cyanchat_utils_im(CyanChatSession* s, CyanChatBuddy* b, const gchar* msg);
-void cyanchat_utils_chat(CyanChatSession* s, const gchar* msg);
+void cyanchat_utils_im(CyanChatSession* s, CyanChatBuddy* b, const gchar* text);
+void cyanchat_utils_chat(CyanChatSession* s, const gchar* text);
 void cyanchat_utils_connect(CyanChatSession* s);
 void cyanchat_utils_auth(CyanChatSession* s, const gchar* passwd);
 void cyanchat_utils_ignore(CyanChatSession* s, CyanChatBuddy* b);
+
+G_END_DECLS
 
 #endif /* _CYANCHAT_UTILS_H */

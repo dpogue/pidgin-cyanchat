@@ -18,37 +18,41 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "cc_utils.h"
+#ifndef _CYANCHAT_PURPLE_CYANCHAT_H
+#define _CYANCHAT_PURPLE_CYANCHAT_H
 
-void
-cyanchat_utils_join(CyanChatSession* s, const gchar* nickname)
-{
-	gchar* msg;
+#include <glib.h>
 
-	msg = g_strdup_printf("%d|%s", CYANCHAT_C_JOIN, nickname);
-	cyanchat_session_send(s, msg);
+#ifndef G_GNUC_NULL_TERMINATED
+#	if __GNUC__ >= 4
+#		define G_GNUC_NULL_TERMINATED __attribute__((__sentinel__))
+#	else
+#		define G_GNUC_NULL_TERMINATED
+#	endif /* __GNUC__ >= 4 */
+#endif /* G_GNUC_NULL_TERMINATED */
 
-	g_free(msg);
-}
+#include <accountopt.h>
+#include <blist.h>
+#include <cmds.h>
+#include <core.h>
+#include <notify.h>
+#include <plugin.h>
+#include <request.h>
+#include <status.h>
+#include <version.h>
 
-void
-cyanchat_utils_part(CyanChatSession* s)
-{
-	gchar* msg;
+#include "cc_purple.h"
 
-	msg = g_strdup_printf("%d", CYANCHAT_C_PART);
-	cyanchat_session_send(s, msg);
+typedef enum {
+	kCmdNick = 0,
+	kCmdAuth,
+	kCmdJoin,
+	kCmdPart,
+	kCmdQuit,
+	kCmdIgnore,
+	kCmdMax
+} prplCyanChatCmds;
 
-	g_free(msg);
-}
+G_GNUC_CONST gchar* prplcyanchat_list_icon(PurpleAccount* a, PurpleBuddy* b);
 
-void
-cyanchat_utils_im(CyanChatSession* s, CyanChatBuddy* b, const gchar* text)
-{
-	gchar* msg;
-
-	msg = g_strdup_printf("%d|%d%s|^0%s", CYANCHAT_C_IM, cyanchat_buddy_get_level(b), cynchat_buddy_get_nickname(b), text);
-	cyanchat_session_send(s, msg);
-	
-	g_free(msg);
-}
+#endif /* _CYANCHAT_PURPLE_CYANCHAT_H */

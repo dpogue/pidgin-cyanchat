@@ -19,7 +19,10 @@
  */
 
 #include "cc_buddy.h"
-#include <util.h>
+
+#include <glib.h>
+#include <glib/gprintf.h>
+#include <glib-object.h>
 
 /* Private Data */
 typedef struct _CyanChatBuddyPrivate CyanChatBuddyPrivate;
@@ -146,8 +149,6 @@ cyanchat_buddy_class_init(CyanChatBuddyClass* klass)
 	g_type_class_add_private(klass, sizeof(CyanChatBuddyPrivate));
 }
 
-//G_DEFINE_TYPE(CyanChatBuddy, cyanchat_buddy, G_TYPE_OBJECT);
-
 GType
 cyanchat_buddy_level_get_type()
 {
@@ -169,7 +170,7 @@ cyanchat_buddy_level_get_type()
 CyanChatBuddy*
 cyanchat_buddy_new(const gchar* nickname, const CyanChatBuddyLevel level, const gboolean ignored)
 {
-	return g_object_new(CYANCHAT_TYPE_BUDDY, "nickname", nickname, "level", level, "ignored", ignored, NULL);
+	return CYANCHAT_BUDDY(g_object_new(CYANCHAT_TYPE_BUDDY, "nickname", nickname, "level", level, "ignored", ignored, NULL));
 }
 
 CyanChatBuddy*
@@ -189,18 +190,18 @@ cyanchat_buddy_new_from_username(const gchar* username)
 	}
 
 	nickname = g_strndup(username + 1, br - username);
-	nickname = purple_utf8_try_convert(nickname);
+	/*nickname = purple_utf8_try_convert(nickname);
 	if(nickname == NULL)
-		nickname = g_strndup(username + 1, br - username);
+		nickname = g_strndup(username + 1, br - username);*/
 
-	return g_object_new(CYANCHAT_TYPE_BUDDY, "nickname", nickname, "level", level, "ignored", FALSE, NULL);
+	return CYANCHAT_BUDDY(g_object_new(CYANCHAT_TYPE_BUDDY, "nickname", nickname, "level", level, "ignored", FALSE, NULL));
 }
 
 gchar*
 cyanchat_buddy_get_nickname(CyanChatBuddy* b)
 {
 	gchar* nickname;
-	g_return_value_if_fail(CYANCHAT_IS_BUDDY(b), NULL);
+	g_return_val_if_fail(CYANCHAT_IS_BUDDY(b), NULL);
 	g_object_get(b, "nickname", &nickname, NULL);
 	return nickname;
 }
@@ -209,7 +210,7 @@ CyanChatBuddyLevel
 cyanchat_buddy_get_level(CyanChatBuddy* b)
 {
 	CyanChatBuddyLevel level;
-	g_return_value_if_fail(CYANCHAT_IS_BUDDY(b), NULL);
+	g_return_val_if_fail(CYANCHAT_IS_BUDDY(b), 0);
 	g_object_get(b, "level", &level, NULL);
 	return level;
 }
@@ -218,7 +219,7 @@ gboolean
 cyanchat_buddy_get_ignored(CyanChatBuddy*b)
 {
 	gboolean ignored;
-	g_return_value_if_fail(CYANCHAT_IS_BUDDY(b), NULL);
+	g_return_val_if_fail(CYANCHAT_IS_BUDDY(b), FALSE);
 	g_object_get(b, "ignored", &ignored, NULL);
 	return ignored;
 }

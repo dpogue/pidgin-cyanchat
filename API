@@ -14,8 +14,8 @@ CyanChatBuddy
 
 cyanchat_utils_join(s, nickname)
 cyanchat_utils_part(s)
-cyanchat_utils_im(s, b, msg)
-cyanchat_utils_chat(s, msg)
+cyanchat_utils_im(s, b, text)
+cyanchat_utils_chat(s, text)
 cyanchat_utils_connect(s)
 cyanchat_utils_auth(s, passwd)
 cyanchat_utils_ignore(s, b)
@@ -26,7 +26,7 @@ CyanChatSession
 	private:
 		gchar*				server
 		guint				port
-		gint				socket
+		GIOChannel*			socket //guint fd?
 		GHashTable*			buddies
 		gchar*				nickname
 		gchar*				reqnick
@@ -43,13 +43,22 @@ CyanChatSession
 		ignore_chat_buddy
 		unhandled_cmd
 		get_version
+		error
+		debug
 	
 	cyanchat_session_new(server, port)
+	cyanchat_session_destroy(s)
 	
+	cyanchat_session_get_server(s)
+	cyanchat_session_get_port(s)
 	cyanchat_session_get_name(s) // "server:port"
-	cyanchat_session_get_nickname(s)
+	cyanchat_session_get_nickname(s) //nickname or NULL
+	cyanchat_session_get_reqnick(s) //NULL or reqnick
 	
-	cyanchat_session_set_nickname(s, reqnick)
+	cyanchat_session_set_server(s, server)
+	cyanchat_session_set_port(s, port)
+	cyanchat_session_set_nickname(s, reqnick) //sets reqnick, nickname set by parser upon "11"
+	cyanchat_session_set_nickname_really(s, nickname) //sets nickname, DO NOT USE
 
 	cyanchat_session_connect(s)
 	cyanchat_session_disconnect(s)
@@ -60,10 +69,17 @@ CyanChatSession
 CyanChatSessionPurple(CyanChatSession)
 	private:
 		PurpleAccount*		account
+		PurpleConnection*	pconn
+		PurpleConversation*	conv
 		guint				chat_id
-		PurpleConversation*	convo
+		guint				ping
 	
 	cyanchat_session_purple_new(account)
+	
+	cyanchat_session_purple_get_chat(s) //conv
+	cyanchat_session_purple_get_chat_id(s) //chat_id
+	
+	cyanchat_session_purple_set_chat(s, conv)
 	
 	cyanchat_session_purple_name_accepted(s)
 	cyanchat_session_purple_name_denied(s)
@@ -76,6 +92,10 @@ CyanChatSessionPurple(CyanChatSession)
 	cyanchat_session_purple_ignore_chat_buddy(s, b)
 	cyanchat_session_purple_unhandled_cmd(s, rawcmd)
 	cyanchat_session_purple_get_version()
+	cyanchat_session_purple_error(GError* err)
+	cyanchat_session_purple_debug(const gchar* format, ...)
+	
+	cyanchat_session_purple_ping(s)
 	
 ======================================
 

@@ -3,7 +3,6 @@ Outline for libcyanchat GObject-ification
 
 * CyanChatSession
 * CyanChatBuddy
-* CyanChatMessage
 * CyanChatPurple (CyanChatSession child)
 
 Non-Classes:
