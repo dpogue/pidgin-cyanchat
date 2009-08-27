@@ -24,7 +24,7 @@
 struct _CyanChatSessionPrivate {
 	gchar* server;
 	guint port;
-	gint socket;
+	GIOChannel* socket;
 	GHashTable* buddies;
 	gchar* nickname;
 	gchar* reqnick;
@@ -43,7 +43,6 @@ cyanchat_session_init(CyanChatSession* self)
 	self->priv->nickname = NULL;
 	self->priv->reqnick = NULL;
 	self->priv->buddies = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, (GDestroyNotify)cyanchat_buddy_free);
-	self->priv->socket = -1; /* -1 as an invalid file descriptor */
 }
 
 static void
@@ -72,4 +71,24 @@ cyanchat_session_class_init(CyanChatSessionClass* klass)
 	gobject_class->finalize = cyanchat_session_finalize;
 
 	g_type_class_add_private(klass, sizeof(CyanChatSessionPrivate));
+}
+
+
+
+
+
+void cyanchat_session_send(CyanChatSession* s, const gchar* msg)
+{
+	g_return_if_fail(CYANCHAT_IS_SESSION(s));
+
+	GIOStatus status;
+	gsize written;
+	gchar* buffer;
+	GError* error = NULL;
+
+	// FIXME - check if we are connected first
+
+	buffer = g_strdup("%s\r\n", msg);
+
+	status = g_io_channel_write_chars(s->priv->socket, buffer, -1, &written, &error);
 }

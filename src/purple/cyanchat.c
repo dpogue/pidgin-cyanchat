@@ -18,3 +18,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "cyanchat.h"
+
+G_GNUC_CONST gchar*
+prplcyanchat_list_icon(PurpleAccount* a, PurpleBuddy* b)
+{
+	return "cyanchat";
+}

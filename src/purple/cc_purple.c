@@ -18,11 +18,26 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _CYANCHAT_PURPLE_H
-#define _CYANCHAT_PURPLE_H
+#include "cc_purple.h"
 
-#include <glib.h>
-#include <glib-object.h>
-#include "cc_session.h"
+#include <core.h>
 
-#endif /* _CYANCHAT_PURPLE_H */
+/* Private Data */
+struct _CyanChatSessionPurplePrivate {
+	PurpleAccount* account;
+	PurpleConnection* pconn;
+	PurpleConversation* conv;
+	guint chat_id;
+	guint ping;
+};
+
+#define CYANCHAT_SESSION_PURPLE_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE((o), CYANCHAT_TYPE_SESSION_PURPLE, CyanChatSessionPurplePrivate))
+
+G_DEFINE_TYPE(CyanChatSessionPurple, cyanchat_session_purple, CYANCHAT_TYPE_SESSION);
+
+
+G_GNUC_CONST gchar*
+cyanchat_session_purple_get_version()
+{
+	return g_strdup("libCyanChat version 2.0 running on %s.", purple_core_get_version());
+}

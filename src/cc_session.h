@@ -66,6 +66,8 @@ struct _CyanChatSession {
   @ignore_chat_buddy: Ignore a chat buddy
   @unhandled_cmd: React to an unexpected message type
   @get_version: The !version response string
+  @error: Handler for errors during read/write
+  @debug: Handler for debug output
 */
 typedef struct _CyanChatSessionClass CyanChatSessionClass;
 struct _CyanChatSessionClass {
@@ -84,17 +86,27 @@ struct _CyanChatSessionClass {
 	void (*unhandled_cmd)(CyanChatSession* s, gchar* rawcmd);
 
 	G_GNUC_CONST gchar* (*get_version)();
+
+	void (*error)(GError* err);
+	void (*debug)(const gchar* format, ...);
 };
 
 GType cyanchat_session_get_type(void);
 CyanChatSession* cyanchat_session_new(const gchar* server, const guint port);
 
+G_GNUC_CONST gchar* cyanchat_session_get_server(CyanChatSession* s);
+G_GNUC_CONST guint cyanchat_session_get_port(CyanChatSession* s);
 G_GNUC_CONST gchar* cyanchat_session_get_name(CyanChatSession* s);
 G_GNUC_CONST gchar* cyanchat_session_get_nickname(CyanChatSession* s);
+G_GNUC_CONST gchar* cyanchat_session_get_reqnick(CyanChatSession* s);
+
+void cyanchat_session_set_server(CyanChatSession* s, const gchar* server);
+void cyanchat_session_set_port(CyanChatSession* s, const guint port);
+void cyanchat_session_set_nickname(CyanChatSession* s, const gchar* nick);
+void cyanchat_session_set_nickname_really(CyanChatSession* s, const gchar* nick);
 
 void cyanchat_session_connect(CyanChatSession* s);
 void cyanchat_session_disconnect(CyanChatSession* s);
-
 /* msg should *NOT* be terminated with \r\n\0 as that is added here */
 void cyanchat_session_send(CyanChatSession* s, const gchar* msg);
 
